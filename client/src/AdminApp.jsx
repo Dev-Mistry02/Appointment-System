@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { apiFetch } from './api.js';
 
 const services = [
   'Preventive cleaning',
@@ -163,7 +164,7 @@ function AppointmentDialog({ appointment, onClose, onSaved }) {
     setError('');
     const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
     try {
-      await readResponse(await fetch('/api/admin/appointments', {
+      await readResponse(await apiFetch('/api/admin/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -614,7 +615,7 @@ export default function AdminApp() {
     setLoadingAppointments(true);
     setLoadError('');
     try {
-      const data = await readResponse(await fetch('/api/admin/appointments'));
+      const data = await readResponse(await apiFetch('/api/admin/appointments'));
       setAppointments(data.appointments.map((appointment) => ({
         ...appointment,
         status: appointment.status || 'pending',
@@ -633,7 +634,7 @@ export default function AdminApp() {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/admin/session')
+    apiFetch('/api/admin/session')
       .then(readResponse)
       .then((session) => {
         if (active) {
@@ -658,7 +659,7 @@ export default function AdminApp() {
   }, [authState, loadAppointments]);
 
   const login = useCallback(async (loginEmail, password) => {
-    const session = await readResponse(await fetch('/api/admin/login', {
+    const session = await readResponse(await apiFetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: loginEmail, password }),
@@ -669,7 +670,7 @@ export default function AdminApp() {
 
   const logout = useCallback(async () => {
     try {
-      await readResponse(await fetch('/api/admin/logout', { method: 'POST' }));
+      await readResponse(await apiFetch('/api/admin/logout', { method: 'POST' }));
     } finally {
       setAppointments([]);
       setEmail('');
@@ -678,7 +679,7 @@ export default function AdminApp() {
   }, []);
 
   const updateAppointmentStatus = useCallback(async (appointment, status) => {
-    const data = await readResponse(await fetch(`/api/admin/appointments/${encodeURIComponent(appointment._id)}/status`, {
+    const data = await readResponse(await apiFetch(`/api/admin/appointments/${encodeURIComponent(appointment._id)}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { apiFetch } from './api.js';
 
 const services = [
   {
@@ -129,7 +130,7 @@ function AppointmentDialog({ dialogRef }) {
     const payload = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch('/api/appointments', {
+      const response = await apiFetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
