@@ -1,0 +1,63 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Dependency check and production build",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/d",
+				"/s",
+				"/c",
+				"if exist node_modules (echo DEPENDENCIES: node_modules exists; install skipped) else (echo DEPENDENCIES: node_modules absent; running npm install & npm install) & npm run build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Conditional install and build",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"-e",
+				"const fs=require('fs'),cp=require('child_process'); if(fs.existsSync('node_modules')) console.log('DEPENDENCIES: node_modules exists; install skipped.'); else { console.log('DEPENDENCIES: node_modules absent; running npm install'); let r=cp.spawnSync('npm.cmd',['install'],{stdio:'inherit',shell:true}); if(r.status!==0) process.exit(r.status||1); } console.log('BUILD: running npm run build'); const r=cp.spawnSync('npm.cmd',['run','build'],{stdio:'inherit',shell:true}); console.log('npm run build exit code:',r.status); process.exit(r.status||0);"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install package dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run production build",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Install dependencies and build client",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/d",
+				"/v:on",
+				"/c",
+				"cd /d \"D:\\My Projects\\Dental Clinic\\client\" & npm install & echo CLIENT_NPM_INSTALL_EXIT=!ERRORLEVEL! & cd /d \"D:\\My Projects\\Dental Clinic\\server\" & npm install & echo SERVER_NPM_INSTALL_EXIT=!ERRORLEVEL! & cd /d \"D:\\My Projects\\Dental Clinic\" & npm install --package-lock-only & echo ROOT_LOCK_ONLY_EXIT=!ERRORLEVEL! & cd /d \"D:\\My Projects\\Dental Clinic\\client\" & npm run build & echo CLIENT_BUILD_EXIT=!ERRORLEVEL!"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
