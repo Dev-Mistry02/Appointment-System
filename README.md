@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # DentalCare
 
 A responsive React home page backed by an Express API and MongoDB appointment storage. The frontend and backend have independent dependencies and npm scripts.
@@ -28,3 +29,6 @@ For production, run `npm run build` in `client`, then start the backend with `np
 The page only calls `POST /api/appointments` when a visitor submits the booking form. It validates the request, stores it in MongoDB, and returns a confirmation reference. The unique date/time index prevents two requests from reserving the same slot; a conflict returns `409` so the visitor can choose another time. The site does not call third-party data APIs.
 
 Appointment requests are not confirmed until clinic staff follow up. Update the sample clinic phone, email, address, images, and clinic details in `client/src/App.jsx` before launch.
+=======
+# Appointment-System
+>>>>>>> aea3219f7465e2c76a0573ac48d84c55ede9ecae
